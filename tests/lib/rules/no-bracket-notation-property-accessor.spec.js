@@ -8,9 +8,22 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
         // add here all the cases that should pass
         "obj['prop']",
         "obj[1]",
-        "obj.hasOwnProperty(variable)",
-        "hasOwnProperty.call(obj, variable)",
-        "obj.hasOwn(variable)",
+        `
+            obj.hasOwnProperty(variable);
+            obj[variable];
+        `,
+        `
+            obj.hasOwn(variable);
+            obj[variable];
+        `,
+        `
+            Object.prototype.hasOwnProperty.call(obj, variable);
+            obj[variable];
+        `,
+        `
+            Object.prototype.hasOwn.call(obj, variable);
+            obj[variable];
+        `,
     ],
 
     invalid: [
@@ -23,10 +36,21 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
             }]
         },
         {
+            code: `
+                obj[variable];
+                obj.hasOwn(variable);
+            `,
+            errors: [{
+                messageId: "avoidBracketNotation",
+                type: "MemberExpression"
+            }]
+        },
+        {
+            name: "Test custom message",
             options: [{
                 customMessage: "custom message"
-            }], 
-            code: "obj[variable]", 
+            }],
+            code: "obj[variable]",
             errors: [{
                 message: "custom message"
             }]

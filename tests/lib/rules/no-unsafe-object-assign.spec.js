@@ -48,6 +48,7 @@ ruleTester.run('no-unsafe-object-assign', rule, {
             }]
         },
         {
+            name: "Test custom message",
             options: [{
                 customMessage: "custom message"
             }], 
