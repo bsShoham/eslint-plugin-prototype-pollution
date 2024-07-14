@@ -48,7 +48,7 @@ Instead of applying rules manually, you can also use our recommended config by a
 ```json
 {
     "extends": [
-        "plugin:prototype-pollution/recommended"
+        "plugin:prototype-pollution/recommended-legacy"
     ]
 }
 ```
