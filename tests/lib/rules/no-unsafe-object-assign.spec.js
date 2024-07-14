@@ -48,13 +48,17 @@ ruleTester.run('no-unsafe-object-assign', rule, {
             }]
         },
         {
+            code: "Object.assign(obj1, obj2)", 
             name: "Test custom message",
             options: [{
                 customMessage: "custom message"
             }], 
-            code: "Object.assign(obj1, obj2)", 
             errors: [{
-                message: "custom message"
+                message: "custom message",
+                suggestions: [{
+                    messageId: "mitigateObjectAssign",
+                    output: "Object.assign({}, obj1, obj2)"
+                }]
             }]
         }
     ]
