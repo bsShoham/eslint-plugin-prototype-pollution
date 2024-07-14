@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-prototype-pollution",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Detect the use of prototype pollution vulnerabilities",
   "homepage": "https://github.com/bsShoham/eslint-plugin-prototype-pollution",
   "repository": {
@@ -15,7 +15,6 @@
   ],
   "author": "bsShoham",
   "main": "./lib/index.js",
-  "exports": "./lib/index.js",
   "scripts": {
     "lint": "npm-run-all \"lint:*\"",
     "lint:eslint-docs": "npm-run-all \"update:eslint-docs -- --check\"",
@@ -41,5 +40,5 @@
     "eslint": ">=7"
   },
   "license": "MIT",
-  "types": "types/index.d.ts"
+  "types": "./types/index.d.ts"
 }
