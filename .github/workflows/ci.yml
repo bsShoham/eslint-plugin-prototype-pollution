@@ -12,8 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The dev toolchain is on ESLint 10, so these are its supported Node
-        # versions -- not the wider range the package publishes in `engines`.
+        # ESLint 10's supported Node versions, not the wider `engines` range.
         node: ['20.19', '22.13', '24']
         eslint: ['9', '10']
     steps:
@@ -34,7 +33,6 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      # eslint, the types check, and the generated-docs freshness check.
       - run: npm run lint
 
   package:
@@ -47,6 +45,4 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      # Catches a rule that works in-repo but breaks once packed and installed
-      # under the published name, on both supported majors.
       - run: node scripts/verify-package.mjs

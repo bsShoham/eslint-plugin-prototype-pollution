@@ -79,7 +79,6 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
         }
     ],
 
-    // Enforced by ESLint 10 only; eslint-plugin/require-test-error-positions
-    // enforces the same discipline at lint time on both majors.
+    // requireLocation is enforced only by the ESLint 10 entry.
     assertionOptions: { requireMessage: true, requireData: true, requireLocation: true }
 });

@@ -1,7 +1,7 @@
 "use strict";
 
 const js = require("@eslint/js");
-// v7 is ESM-only with no `module.exports` interop export, so require() yields { default }.
+// epep v7 is ESM-only with no interop export, so require() yields { default }.
 const eslintPlugin = require("eslint-plugin-eslint-plugin").default;
 const nodePlugin = require("eslint-plugin-n");
 const globals = require("globals");
@@ -20,10 +20,8 @@ module.exports = [
             globals: globals.node
         },
         rules: {
-            // meta.defaultOptions is only honoured from ESLint 9.15, and this plugin
-            // supports ^9.0.0 -- a rule that relied on it would read undefined options
-            // on 9.0-9.14. There is also nothing to default: the sole option is
-            // customMessage, whose absence selects a different messageId.
+            // meta.defaultOptions is only honoured from ESLint 9.15, but this plugin
+            // supports ^9.0.0 -- relying on it would read undefined options on 9.0-9.14.
             "eslint-plugin/require-meta-default-options": "off"
         }
     },
@@ -37,8 +35,7 @@ module.exports = [
             globals: globals.mocha
         },
         rules: {
-            // assertionOptions.requireLocation only bites on the ESLint 10 matrix
-            // entry; this catches a location-less test case on both.
+            // assertionOptions.requireLocation only bites on the ESLint 10 entry.
             "eslint-plugin/require-test-error-positions": "error"
         }
     }

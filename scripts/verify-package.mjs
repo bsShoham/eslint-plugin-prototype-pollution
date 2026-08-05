@@ -1,9 +1,6 @@
-// Packs the plugin and consumes it the way a real user would, on every supported
-// ESLint major. Catches breakage that the in-repo suite cannot: a bad `files`
-// list, a missing runtime dependency, or a config that only resolves when the
-// plugin is required by relative path rather than by its published name.
-//
-// Run: node scripts/verify-package.mjs
+// Consumes the packed plugin under its published name, on every supported ESLint
+// major. Catches what the in-repo suite cannot: a bad `files` list, a missing
+// runtime dependency, a config that only resolves via relative require.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, writeFileSync, rmSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -29,6 +26,15 @@ function run(cmd, args, cwd) {
     return execFileSync(cmd, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
 }
 
+function succeeds(fn) {
+    try {
+        fn();
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 function check(label, condition, detail) {
     if (condition) {
         console.log(`  PASS  ${label}`);
@@ -38,7 +44,6 @@ function check(label, condition, detail) {
     }
 }
 
-// --- pack, and assert the tarball's shape -----------------------------------
 const repoRoot = process.cwd();
 const packDir = mkdtempSync(join(tmpdir(), "pp-pack-"));
 const tarball = join(packDir, JSON.parse(run("npm", ["pack", "--json", "--pack-destination", packDir], repoRoot))[0].filename);
@@ -55,7 +60,6 @@ const entries = run("tar", ["-tzf", tarball], repoRoot).trim().split("\n").sort(
 const leaked = entries.filter((e) => /^package\/(tests|scripts|\.github|eslint\.config)/.test(e));
 check("tarball excludes tests and dev configs", leaked.length === 0, `leaked: ${leaked.join(", ")}`);
 
-// --- consume it, per ESLint major -------------------------------------------
 for (const major of ESLINT_MAJORS) {
     console.log(`\neslint ${major}`);
     const dir = mkdtempSync(join(tmpdir(), `pp-consume-${major}-`));
@@ -85,16 +89,9 @@ for (const major of ESLINT_MAJORS) {
             rmSync(join(dir, file));
         }
 
-        // eslintrc must not be silently honored on either major: v1 ships no
-        // legacy config, and ESLint 10 removed the system outright.
+        // Negative test: v1 ships no legacy config, and 10 removed eslintrc outright.
         writeFileSync(join(dir, ".eslintrc.json"), ESLINTRC);
-        let honored = false;
-        try {
-            run("npx", ["eslint", "target.js"], dir);
-            honored = true;
-        } catch {
-            honored = false;
-        }
+        const honored = succeeds(() => run("npx", ["eslint", "target.js"], dir));
         check("eslintrc is not honored", !honored, "an .eslintrc.json config was accepted");
         rmSync(join(dir, ".eslintrc.json"));
     } finally {

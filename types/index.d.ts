@@ -1,5 +1,5 @@
 // Self-contained: `eslint` is only a peer dependency, so these types must not
-// depend on its own types being resolvable in the consumer's project.
+// depend on its own types resolving.
 
 declare namespace prototypePollution {
     type RuleSeverity = "off" | "warn" | "error" | 0 | 1 | 2;
