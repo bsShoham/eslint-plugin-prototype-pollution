@@ -1,4 +1,6 @@
-# Detect unsafe usage of Object.assign (`prototype-pollution/no-unsafe-object-assign`)
+# prototype-pollution/no-unsafe-object-assign
+
+📝 Detect unsafe usage of Object.assign.
 
 ⚠️ This rule _warns_ in the ✅ `recommended` config.
 
