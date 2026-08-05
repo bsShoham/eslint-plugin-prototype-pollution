@@ -11,16 +11,17 @@ import { join } from "node:path";
 
 const ESLINT_MAJORS = ["9", "10"];
 const PKG = "eslint-plugin-prototype-pollution";
+const PREFIX = "prototype-pollution";
 
 const UNSAFE_CODE = "Object.assign(target, source);\nvar value = obj[key];\n";
 const EXPECTED_RULES = [
-    `${PKG.replace("eslint-plugin-", "")}/no-bracket-notation-property-accessor`,
-    `${PKG.replace("eslint-plugin-", "")}/no-unsafe-object-assign`
+    `${PREFIX}/no-bracket-notation-property-accessor`,
+    `${PREFIX}/no-unsafe-object-assign`
 ];
 
 const FLAT_CJS = `const p = require("${PKG}");\nmodule.exports = [p.configs.recommended];\n`;
 const FLAT_ESM = `import p from "${PKG}";\nexport default [p.configs.recommended];\n`;
-const ESLINTRC = `{ "root": true, "extends": ["plugin:${PKG.replace("eslint-plugin-", "prototype-pollution")}/recommended-legacy"] }\n`;
+const ESLINTRC = `{ "root": true, "extends": ["plugin:${PREFIX}/recommended"] }\n`;
 
 const failures = [];
 
