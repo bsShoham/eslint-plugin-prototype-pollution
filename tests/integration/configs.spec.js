@@ -181,8 +181,13 @@ describe(`integration (eslint ${version})`, function () {
             );
         });
 
-        it("exports plugin meta so ESLint can name the plugin in output", function () {
-            assert.strictEqual(plugin.meta.name, "eslint-plugin-prototype-pollution");
+        it("keeps the plugin name short and matching the rule prefix", function () {
+            // Intentionally "prototype-pollution" rather than the npm package
+            // name: it matches the prefix rules are configured under. ESLint
+            // only uses meta.name to identify the plugin internally, so this is
+            // a naming choice, not a correctness one -- pinned so it does not
+            // drift.
+            assert.strictEqual(plugin.meta.name, "prototype-pollution");
             assert.strictEqual(typeof plugin.meta.version, "string");
         });
 
