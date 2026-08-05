@@ -23,6 +23,7 @@ const assignRule = plugin.rules["no-unsafe-object-assign"];
 const suggestionsSupported: boolean | undefined = assignRule.meta.hasSuggestions;
 
 const pluginName: string = plugin.meta.name;
+const pluginNamespace: string = plugin.meta.namespace;
 const pluginVersion: string = plugin.meta.version;
 
 const severities: plugin.RuleEntry[] = ["off", "warn", "error", 0, 1, 2, ["error"], ["error", {}]];
@@ -34,6 +35,7 @@ export {
     bracketRule,
     suggestionsSupported,
     pluginName,
+    pluginNamespace,
     pluginVersion,
     severities
 };

@@ -31,6 +31,11 @@ module.exports = [
         files: ["tests/**/*.js"],
         languageOptions: {
             globals: globals.mocha
+        },
+        rules: {
+            // assertionOptions.requireLocation only bites on the ESLint 10 matrix
+            // entry; this catches a location-less test case on both.
+            "eslint-plugin/require-test-error-positions": "error"
         }
     }
 ];

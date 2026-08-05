@@ -17,19 +17,29 @@ ruleTester.run('no-unsafe-object-assign', rule, {
 
     invalid: [
         {
+            name: "Reports a non-literal target",
             code: "Object.assign(obj1, obj2)",
             errors: [{
                 messageId: "avoidObjectAssign",
+                line: 1,
+                column: 1,
+                endLine: 1,
+                endColumn: 26,
                 suggestions: [{
                     messageId: "mitigateObjectAssign",
                     output: "Object.assign({}, obj1, obj2)"
                 }]
-            }],
+            }]
         },
         {
+            name: "Reports even when a later argument is a literal",
             code: "Object.assign(obj1, {prop: 1})",
             errors: [{
                 messageId: "avoidObjectAssign",
+                line: 1,
+                column: 1,
+                endLine: 1,
+                endColumn: 31,
                 suggestions: [{
                     messageId: "mitigateObjectAssign",
                     output: "Object.assign({}, obj1, {prop: 1})"
@@ -37,9 +47,14 @@ ruleTester.run('no-unsafe-object-assign', rule, {
             }]
         },
         {
+            name: "Reports with three arguments",
             code: "Object.assign(obj1, obj2, obj3)",
             errors: [{
                 messageId: "avoidObjectAssign",
+                line: 1,
+                column: 1,
+                endLine: 1,
+                endColumn: 32,
                 suggestions: [{
                     messageId: "mitigateObjectAssign",
                     output: "Object.assign({}, obj1, obj2, obj3)"
@@ -47,18 +62,26 @@ ruleTester.run('no-unsafe-object-assign', rule, {
             }]
         },
         {
-            code: "Object.assign(obj1, obj2)", 
             name: "Test custom message",
+            code: "Object.assign(obj1, obj2)",
             options: [{
                 customMessage: "custom message"
-            }], 
+            }],
             errors: [{
                 message: "custom message",
+                line: 1,
+                column: 1,
+                endLine: 1,
+                endColumn: 26,
                 suggestions: [{
                     messageId: "mitigateObjectAssign",
                     output: "Object.assign({}, obj1, obj2)"
                 }]
             }]
         }
-    ]
+    ],
+
+    // Enforced by ESLint 10 only; eslint-plugin/require-test-error-positions
+    // enforces the same discipline at lint time on both majors.
+    assertionOptions: { requireMessage: true, requireData: true, requireLocation: true }
 });

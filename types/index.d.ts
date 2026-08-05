@@ -38,6 +38,7 @@ declare namespace prototypePollution {
     interface Plugin {
         readonly meta: {
             readonly name: string;
+            readonly namespace: string;
             readonly version: string;
         };
         readonly rules: Readonly<Record<RuleName, RuleModule>>;

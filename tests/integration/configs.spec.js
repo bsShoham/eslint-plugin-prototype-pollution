@@ -1,7 +1,7 @@
 "use strict";
 
 const assert = require("assert");
-const { ESLint, version } = require("../helpers/eslint");
+const { ESLint, version, pkgName } = require("../helpers/eslint");
 const plugin = require("../../lib");
 
 const UNSAFE_CODE = "Object.assign(target, source);\nvar value = obj[key];\n";
@@ -81,9 +81,16 @@ describe(`integration (eslint ${version})`, function () {
             assert.strictEqual(flat.plugins["prototype-pollution"], plugin);
         });
 
-        it("keeps the plugin name short and matching the rule prefix", function () {
-            assert.strictEqual(plugin.meta.name, "prototype-pollution");
+        it("names itself after the package and namespaces itself after the rule prefix", function () {
+            assert.strictEqual(plugin.meta.name, "eslint-plugin-prototype-pollution");
+            assert.strictEqual(plugin.meta.namespace, "prototype-pollution");
             assert.strictEqual(typeof plugin.meta.version, "string");
+        });
+
+        it("namespaces itself with the prefix every recommended rule uses", function () {
+            for (const ruleId of Object.keys(plugin.configs.recommended.rules)) {
+                assert.strictEqual(ruleId.split("/")[0], plugin.meta.namespace);
+            }
         });
 
         it("exports both rules with the names the configs reference", function () {
@@ -97,6 +104,32 @@ describe(`integration (eslint ${version})`, function () {
                     assert.ok(plugin.rules[ruleName], `${ruleId} has no matching rule`);
                 }
             }
+        });
+    });
+
+    describe("meta.namespace", function () {
+        // defineConfig landed in ESLint 9.22; on 9.0-9.21 the remapping is inert.
+        const { defineConfig } = require(pkgName + "/config");
+
+        it("remaps rule IDs when a consumer registers the plugin under another key", async function () {
+            const engine = createEngine(defineConfig([{
+                files: ["**/*.js"],
+                plugins: { pp: plugin },
+                extends: ["pp/recommended"]
+            }]));
+            assert.deepStrictEqual(
+                ruleIds(await lint(engine, UNSAFE_CODE)),
+                ["pp/no-bracket-notation-property-accessor", "pp/no-unsafe-object-assign"]
+            );
+        });
+
+        it("still uses the default prefix when registered under it", async function () {
+            const engine = createEngine(defineConfig([{
+                files: ["**/*.js"],
+                plugins: { "prototype-pollution": plugin },
+                extends: ["prototype-pollution/recommended"]
+            }]));
+            assert.deepStrictEqual(ruleIds(await lint(engine, UNSAFE_CODE)), BOTH_RULES);
         });
     });
 
