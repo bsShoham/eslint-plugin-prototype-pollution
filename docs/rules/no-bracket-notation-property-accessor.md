@@ -1,6 +1,8 @@
-# Detect unsafe usage of bracket notation property accessor (`prototype-pollution/no-bracket-notation-property-accessor`)
+# prototype-pollution/no-bracket-notation-property-accessor
 
-⚠️ This rule _warns_ in the following configs: ✅ `recommended`, 🏛️ `recommended-legacy`.
+📝 Detect unsafe usage of bracket notation property accessor.
+
+⚠️ This rule _warns_ in the ✅ `recommended` config.
 
 <!-- end auto-generated rule header -->
 
@@ -8,8 +10,8 @@
 
 <!-- begin auto-generated rule options list -->
 
-| Name            | Type   |
-| :-------------- | :----- |
-| `customMessage` | String |
+| Name            | Description                                             | Type   |
+| :-------------- | :------------------------------------------------------ | :----- |
+| `customMessage` | Replaces the default report message with your own text. | String |
 
 <!-- end auto-generated rule options list -->

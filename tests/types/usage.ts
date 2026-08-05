@@ -2,7 +2,6 @@
 import plugin = require("../../types/index");
 
 const flatConfig = [plugin.configs.recommended];
-const flatAlias = [plugin.configs["flat/recommended"]];
 
 const selfRegistered: unknown = plugin.configs.recommended.plugins["prototype-pollution"];
 
@@ -19,26 +18,24 @@ const manualFlat = [
     }
 ];
 
-const legacyPlugins: readonly string[] = plugin.configs["recommended-legacy"].plugins;
-
 const bracketRule = plugin.rules["no-bracket-notation-property-accessor"];
 const assignRule = plugin.rules["no-unsafe-object-assign"];
 const suggestionsSupported: boolean | undefined = assignRule.meta.hasSuggestions;
 
 const pluginName: string = plugin.meta.name;
+const pluginNamespace: string = plugin.meta.namespace;
 const pluginVersion: string = plugin.meta.version;
 
 const severities: plugin.RuleEntry[] = ["off", "warn", "error", 0, 1, 2, ["error"], ["error", {}]];
 
 export {
     flatConfig,
-    flatAlias,
     selfRegistered,
     manualFlat,
-    legacyPlugins,
     bracketRule,
     suggestionsSupported,
     pluginName,
+    pluginNamespace,
     pluginVersion,
     severities
 };

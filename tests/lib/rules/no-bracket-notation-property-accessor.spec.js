@@ -26,26 +26,31 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
     ],
 
     invalid: [
-        // Non-Identifier object, so the rule reads the object's source text.
         {
+            // Non-Identifier object, so the rule reads the object's source text.
+            name: "Reports a computed access on a call result",
             code: "foo().bar[variable]",
             errors: [{
                 messageId: "avoidBracketNotation",
                 line: 1,
                 column: 1,
+                endLine: 1,
                 endColumn: 20
             }]
         },
         {
+            name: "Reports a computed access on an identifier",
             code: "obj[variable]",
             errors: [{
                 messageId: "avoidBracketNotation",
                 line: 1,
                 column: 1,
+                endLine: 1,
                 endColumn: 14
             }]
         },
         {
+            name: "Reports when the hasOwn check comes after the access",
             code: `
                 obj[variable];
                 obj.hasOwn(variable);
@@ -54,6 +59,7 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
                 messageId: "avoidBracketNotation",
                 line: 2,
                 column: 17,
+                endLine: 2,
                 endColumn: 30
             }]
         },
@@ -64,8 +70,15 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
             }],
             code: "obj[variable]",
             errors: [{
-                message: "custom message"
+                message: "custom message",
+                line: 1,
+                column: 1,
+                endLine: 1,
+                endColumn: 14
             }]
         }
-    ]
+    ],
+
+    // requireLocation is enforced only by the ESLint 10 entry.
+    assertionOptions: { requireMessage: true, requireData: true, requireLocation: true }
 });
