@@ -2,10 +2,10 @@
   "name": "eslint-plugin-prototype-pollution",
   "version": "0.2.0",
   "description": "Detect the use of prototype pollution vulnerabilities",
-  "homepage": "https://github.com/bsShoham/eslint-plugin-prototype-pollution",
+  "homepage": "https://github.com/shoham-utila/eslint-plugin-prototype-pollution",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bsShoham/eslint-plugin-prototype-pollution.git"
+    "url": "git+https://github.com/shoham-utila/eslint-plugin-prototype-pollution.git"
   },
   "keywords": [
     "eslint",
