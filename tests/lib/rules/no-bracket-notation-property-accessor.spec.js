@@ -3,13 +3,8 @@ const rule = require('../../../lib/rules/no-bracket-notation-property-accessor')
 
 const ruleTester = createRuleTester();
 
-// ESLint 10's RuleTester rejects the `type` error property, so the reported node
-// is pinned with column/endColumn instead. That is the stricter assertion
-// anyway: it proves the whole member expression is reported rather than just the
-// property identifier.
 ruleTester.run('no-bracket-notation-property-accessor', rule, {
     valid: [
-        // add here all the cases that should pass
         "obj['prop']",
         "obj[1]",
         `
@@ -31,8 +26,7 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
     ],
 
     invalid: [
-        // Non-Identifier object, so the rule falls back to reading the source
-        // text of the object -- exercises the sourceCode lookup.
+        // Non-Identifier object, so the rule reads the object's source text.
         {
             code: "foo().bar[variable]",
             errors: [{
@@ -42,7 +36,6 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
                 endColumn: 20
             }]
         },
-        // add here all the cases that should not pass
         {
             code: "obj[variable]",
             errors: [{

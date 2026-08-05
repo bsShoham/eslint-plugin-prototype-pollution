@@ -1,7 +1,3 @@
-/**
- * Lint config for this repository. Flat config, so it is read by the ESLint 9
- * devDependency -- the previous `.eslintrc.js` was silently ignored by it.
- */
 "use strict";
 
 const js = require("@eslint/js");

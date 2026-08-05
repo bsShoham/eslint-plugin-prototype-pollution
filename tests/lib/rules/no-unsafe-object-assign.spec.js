@@ -5,11 +5,10 @@ const ruleTester = createRuleTester();
 
 ruleTester.run('no-unsafe-object-assign', rule, {
     valid: [
-        // add here all the cases that should pass
         "Object.assign({}, obj1, obj2)",
         "Object.assign({prop: 1}, obj1, obj2)",
         "Object.assign({prop: 1}, obj1, {prop2: 2})",
-        // No first argument to inspect -- must not throw
+        // No first argument to inspect; must not throw.
         "Object.assign()",
         "Object.assign;",
         "assign(obj1, obj2)",
@@ -17,7 +16,6 @@ ruleTester.run('no-unsafe-object-assign', rule, {
     ],
 
     invalid: [
-        // add here all the cases that should not pass
         {
             code: "Object.assign(obj1, obj2)",
             errors: [{

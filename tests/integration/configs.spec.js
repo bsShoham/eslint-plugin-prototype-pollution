@@ -1,15 +1,9 @@
-/**
- * Loads the plugin the way real consumers do, through both of ESLint's config
- * systems, on whichever major is under test. These are the tests that catch
- * "works on 9, broken on 8" regressions -- RuleTester alone cannot.
- */
 "use strict";
 
 const assert = require("assert");
 const { FlatESLint, LegacyESLint, major, version, supportsEslintrc, pkgName } = require("../helpers/eslint");
 const plugin = require("../../lib");
 
-// Trips both rules exactly once.
 const UNSAFE_CODE = "Object.assign(target, source);\nvar value = obj[key];\n";
 
 const RULE_ASSIGN = "prototype-pollution/no-unsafe-object-assign";
@@ -88,12 +82,8 @@ describe(`integration (eslint ${version})`, function () {
         });
     });
 
-    // ESLint 10 removed the eslintrc system, so there is no engine to test
-    // against. The exported `recommended-legacy` config stays in place for the
-    // ESLint 8 and 9 users who still need it.
     (supportsEslintrc ? describe : describe.skip)("eslintrc config (.eslintrc / .eslintrc.js / .eslintrc.json)", function () {
-        // `plugins` lets us register the plugin without installing it under its
-        // published name, which is what makes the string `extends` below resolve.
+        // Registering here is what makes the string `extends` below resolve.
         function createEngine(overrideConfig) {
             return new LegacyESLint({
                 useEslintrc: false,
@@ -145,9 +135,6 @@ describe(`integration (eslint ${version})`, function () {
         });
 
         it("gives every eslintrc-facing config a slash-free name", function () {
-            // eslintrc resolves "plugin:<name>/<config>" by splitting on the
-            // first slash, so a slash in the config name is read as part of the
-            // plugin name and fails to resolve.
             for (const [name, config] of Object.entries(plugin.configs)) {
                 if (Array.isArray(config.plugins)) {
                     assert.ok(!name.includes("/"), `eslintrc config "${name}" must not contain a slash`);
@@ -159,7 +146,6 @@ describe(`integration (eslint ${version})`, function () {
             const legacy = plugin.configs["recommended-legacy"];
             assert.ok(Array.isArray(legacy.plugins));
             assert.deepStrictEqual(legacy.plugins, ["prototype-pollution"]);
-            // eslintrc rejects unknown top-level keys, `name` included.
             assert.ok(!("name" in legacy), "legacy config must not carry a flat-config name");
         });
 
@@ -182,11 +168,6 @@ describe(`integration (eslint ${version})`, function () {
         });
 
         it("keeps the plugin name short and matching the rule prefix", function () {
-            // Intentionally "prototype-pollution" rather than the npm package
-            // name: it matches the prefix rules are configured under. ESLint
-            // only uses meta.name to identify the plugin internally, so this is
-            // a naming choice, not a correctness one -- pinned so it does not
-            // drift.
             assert.strictEqual(plugin.meta.name, "prototype-pollution");
             assert.strictEqual(typeof plugin.meta.version, "string");
         });
@@ -228,7 +209,7 @@ describe(`integration (eslint ${version})`, function () {
 
     (supportsEslintrc ? describe : describe.skip)("cross-system safety net", function () {
         it("rejects the flat config when passed to eslintrc, rather than silently doing nothing", function () {
-            // eslintrc validates the config array eagerly, in the constructor.
+            // eslintrc validates eagerly, in the constructor.
             assert.throws(
                 () => new LegacyESLint({
                     useEslintrc: false,
@@ -264,8 +245,6 @@ describe(`integration (eslint ${version})`, function () {
             });
 
             it("still exports recommended-legacy for ESLint 8 and 9 consumers", function () {
-                // Harmless on 10 -- nothing reads it -- but removing it would
-                // break every eslintrc user still on an older major.
                 const legacy = plugin.configs["recommended-legacy"];
                 assert.ok(Array.isArray(legacy.plugins));
                 assert.deepStrictEqual(Object.keys(legacy.rules).sort(), [RULE_BRACKET, RULE_ASSIGN].sort());
@@ -278,7 +257,6 @@ describe(`integration (eslint ${version})`, function () {
                 });
                 const results = await engine.lintText(UNSAFE_CODE, { filePath: "input.js" });
                 assert.deepStrictEqual(ruleIds(results[0].messages), [RULE_BRACKET, RULE_ASSIGN].sort());
-                // ESLint 10 surfaces rule-level deprecations here.
                 assert.deepStrictEqual(results[0].usedDeprecatedRules || [], []);
             });
         });
