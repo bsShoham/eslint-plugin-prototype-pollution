@@ -1,11 +1,10 @@
-const RuleTester = require('eslint').RuleTester;
-const rule = require('../../../lib/rules/no-bracket-notation-property-accessor'); // replace with the path to your rule file
+const { createRuleTester } = require('../../helpers/eslint');
+const rule = require('../../../lib/rules/no-bracket-notation-property-accessor');
 
-const ruleTester = new RuleTester();
+const ruleTester = createRuleTester();
 
 ruleTester.run('no-bracket-notation-property-accessor', rule, {
     valid: [
-        // add here all the cases that should pass
         "obj['prop']",
         "obj[1]",
         `
@@ -27,12 +26,23 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
     ],
 
     invalid: [
-        // add here all the cases that should not pass
+        // Non-Identifier object, so the rule reads the object's source text.
+        {
+            code: "foo().bar[variable]",
+            errors: [{
+                messageId: "avoidBracketNotation",
+                line: 1,
+                column: 1,
+                endColumn: 20
+            }]
+        },
         {
             code: "obj[variable]",
             errors: [{
                 messageId: "avoidBracketNotation",
-                type: "MemberExpression"
+                line: 1,
+                column: 1,
+                endColumn: 14
             }]
         },
         {
@@ -42,7 +52,9 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
             `,
             errors: [{
                 messageId: "avoidBracketNotation",
-                type: "MemberExpression"
+                line: 2,
+                column: 17,
+                endColumn: 30
             }]
         },
         {
