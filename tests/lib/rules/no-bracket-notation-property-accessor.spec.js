@@ -1,8 +1,12 @@
-const RuleTester = require('eslint').RuleTester;
-const rule = require('../../../lib/rules/no-bracket-notation-property-accessor'); // replace with the path to your rule file
+const { createRuleTester } = require('../../helpers/eslint');
+const rule = require('../../../lib/rules/no-bracket-notation-property-accessor');
 
-const ruleTester = new RuleTester();
+const ruleTester = createRuleTester();
 
+// ESLint 10's RuleTester rejects the `type` error property, so the reported node
+// is pinned with column/endColumn instead. That is the stricter assertion
+// anyway: it proves the whole member expression is reported rather than just the
+// property identifier.
 ruleTester.run('no-bracket-notation-property-accessor', rule, {
     valid: [
         // add here all the cases that should pass
@@ -27,12 +31,25 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
     ],
 
     invalid: [
+        // Non-Identifier object, so the rule falls back to reading the source
+        // text of the object -- exercises the sourceCode lookup.
+        {
+            code: "foo().bar[variable]",
+            errors: [{
+                messageId: "avoidBracketNotation",
+                line: 1,
+                column: 1,
+                endColumn: 20
+            }]
+        },
         // add here all the cases that should not pass
         {
             code: "obj[variable]",
             errors: [{
                 messageId: "avoidBracketNotation",
-                type: "MemberExpression"
+                line: 1,
+                column: 1,
+                endColumn: 14
             }]
         },
         {
@@ -42,7 +59,9 @@ ruleTester.run('no-bracket-notation-property-accessor', rule, {
             `,
             errors: [{
                 messageId: "avoidBracketNotation",
-                type: "MemberExpression"
+                line: 2,
+                column: 17,
+                endColumn: 30
             }]
         },
         {
