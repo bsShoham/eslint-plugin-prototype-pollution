@@ -10,8 +10,8 @@
 
 <!-- begin auto-generated rule options list -->
 
-| Name            | Type   |
-| :-------------- | :----- |
-| `customMessage` | String |
+| Name            | Description                                             | Type   |
+| :-------------- | :------------------------------------------------------ | :----- |
+| `customMessage` | Replaces the default report message with your own text. | String |
 
 <!-- end auto-generated rule options list -->
