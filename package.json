@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-prototype-pollution",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Detect the use of prototype pollution vulnerabilities",
   "homepage": "https://github.com/shoham-utila/eslint-plugin-prototype-pollution",
   "repository": {
@@ -31,7 +31,8 @@
     "test": "npm-run-all \"test:*\"",
     "test:eslint9": "cross-env ESLINT_PKG=eslint9 mocha tests --recursive",
     "test:eslint10": "mocha tests --recursive",
-    "update:eslint-docs": "eslint-doc-generator"
+    "update:eslint-docs": "eslint-doc-generator",
+    "verify:package": "node scripts/verify-package.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

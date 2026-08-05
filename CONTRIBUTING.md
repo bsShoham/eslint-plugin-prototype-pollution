@@ -35,6 +35,18 @@ ESLint 9 is installed under a version-suffixed alias so both majors can live in
 `node_modules` at once. Tests must never `require("eslint")` directly — use
 `tests/helpers/eslint.js`, which resolves whichever version is under test.
 
+Developing this plugin needs Node `^20.19.0 || ^22.13.0 || >=24`, because the dev
+toolchain is on ESLint 10. That is stricter than the `engines` range the package
+publishes, which stays at ESLint 9's floor so ESLint-9-on-Node-18 consumers can
+still install it.
+
+Assert error locations in rule tests. Both specs pass
+`assertionOptions: { requireMessage, requireData, requireLocation }` — note that
+belongs inside the object passed to `ruleTester.run()`, alongside
+`valid`/`invalid`, and is enforced only by the ESLint 10 entry. The
+`eslint-plugin/require-test-error-positions` lint rule catches the same mistake
+on both majors.
+
 `tests/integration/configs.spec.js` loads the exported config through a real
 ESLint instance. If you touch `lib/index.js`, that is the file that will tell you
 whether you broke it.

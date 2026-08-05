@@ -28,6 +28,10 @@ module.exports = [
         }
     },
     {
+        files: ["**/*.mjs"],
+        languageOptions: { sourceType: "module" }
+    },
+    {
         files: ["tests/**/*.js"],
         languageOptions: {
             globals: globals.mocha
