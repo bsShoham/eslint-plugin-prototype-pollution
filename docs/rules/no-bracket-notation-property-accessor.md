@@ -1,6 +1,6 @@
 # Detect unsafe usage of bracket notation property accessor (`prototype-pollution/no-bracket-notation-property-accessor`)
 
-⚠️ This rule _warns_ in the following configs: ✅ `recommended`, 🏛️ `recommended-legacy`.
+⚠️ This rule _warns_ in the ✅ `recommended` config.
 
 <!-- end auto-generated rule header -->
 

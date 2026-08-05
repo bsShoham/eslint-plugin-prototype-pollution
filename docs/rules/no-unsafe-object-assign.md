@@ -1,6 +1,6 @@
 # Detect unsafe usage of Object.assign (`prototype-pollution/no-unsafe-object-assign`)
 
-⚠️ This rule _warns_ in the following configs: ✅ `recommended`, 🏛️ `recommended-legacy`.
+⚠️ This rule _warns_ in the ✅ `recommended` config.
 
 💡 This rule is manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).
 

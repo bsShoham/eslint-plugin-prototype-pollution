@@ -30,7 +30,6 @@
     "lint:types": "tsc --noEmit --project tests/types/tsconfig.json",
     "test": "npm-run-all \"test:*\"",
     "test:eslint9": "mocha tests --recursive",
-    "test:eslint8": "cross-env ESLINT_PKG=eslint8 mocha tests --recursive",
     "test:eslint10": "cross-env ESLINT_PKG=eslint10 mocha tests --recursive",
     "update:eslint-docs": "eslint-doc-generator"
   },
@@ -42,7 +41,6 @@
     "eslint-plugin-eslint-plugin": "^6.2.0",
     "eslint-plugin-n": "^17.10.2",
     "eslint10": "npm:eslint@^10.8.0",
-    "eslint8": "npm:eslint@^8.57.1",
     "espree": "^10.1.0",
     "globals": "^15.15.0",
     "mocha": "^11.8.0",

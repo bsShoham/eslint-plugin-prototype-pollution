@@ -22,33 +22,22 @@ how to do that, please ask and I'll be happy to help.
 
 ### Running the tests
 
-The plugin supports ESLint 8, 9 and 10, and both of ESLint's config systems, so
-the suite runs once per major:
+The plugin supports ESLint 9 and 10, flat config only, so the suite runs once per
+major:
 
 ```sh
-npm test               # all three majors
-npm run test:eslint8   # the `eslint8` alias  (npm:eslint@^8)
-npm run test:eslint9   # the `eslint` devDependency (v9)
-npm run test:eslint10  # the `eslint10` alias (npm:eslint@^10)
+npm test               # both majors
+npm run test:eslint9   # the `eslint9` alias (npm:eslint@^9)
+npm run test:eslint10  # the `eslint` devDependency (v10)
 ```
 
-ESLint 8 and 10 are installed under version-suffixed aliases so all three majors
-can live in `node_modules` at once. Tests must never `require("eslint")`
-directly — use `tests/helpers/eslint.js`, which resolves whichever version is
-under test and exposes the engines under stable names.
+ESLint 9 is installed under a version-suffixed alias so both majors can live in
+`node_modules` at once. Tests must never `require("eslint")` directly — use
+`tests/helpers/eslint.js`, which resolves whichever version is under test.
 
-Two things that differ per major, both already handled by the helper:
-
-- **ESLint 10 removed the eslintrc system.** `LegacyESLint` does not exist there,
-  so the helper exports `supportsEslintrc` and the eslintrc suites skip on 10.
-  Do not add an eslintrc test without that guard.
-- **ESLint 10's RuleTester rejects the `type` error property.** Assert
-  `column`/`endColumn` instead — it pins the reported node more precisely and
-  works on all three majors.
-
-`tests/integration/configs.spec.js` loads the exported configs through a real
-ESLint instance in both config systems. If you touch `lib/index.js`, that is the
-file that will tell you whether you broke one of them.
+`tests/integration/configs.spec.js` loads the exported config through a real
+ESLint instance. If you touch `lib/index.js`, that is the file that will tell you
+whether you broke it.
 
 Two more checks worth knowing about:
 
@@ -57,9 +46,9 @@ npm run lint        # eslint + the types check + the docs check
 npm run lint:types  # typechecks types/index.d.ts against tests/types/usage.ts
 ```
 
-`types/index.d.ts` intentionally does not import from `eslint`, because
-`Linter.Config` means a flat config in ESLint 9's types and an eslintrc config in
-`@types/eslint` for ESLint 8. Keep it self-contained.
+`types/index.d.ts` intentionally does not import from `eslint`. Because `eslint`
+is only a peer dependency, these types must not depend on its own types being
+resolvable in the consumer's project. Keep it self-contained.
 
 We work on the main branch, so please base your pull requests there. We aim to follow
 [semantic versioning](https://semver.org/) and will release new versions as

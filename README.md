@@ -27,35 +27,16 @@ yarn add eslint-plugin-prototype-pollution --dev
 
 ## Compatibility
 
-Requires **ESLint 8, 9 or 10**. Every combination below is covered by the test
-suite, which runs against all three majors.
+Requires **ESLint 9 or 10**, and **flat config** (`eslint.config.js`). Both majors
+are covered by the test suite, which runs once per major.
 
-| ESLint | Flat config (`eslint.config.js`) | eslintrc (`.eslintrc*`) |
-| :--- | :--- | :--- |
-| 10 | ✅ `recommended` | ❌ removed from ESLint itself |
-| 9 | ✅ `recommended` (default) | ✅ `recommended-legacy`, via `ESLINT_USE_FLAT_CONFIG=false` |
-| 8 | ✅ `recommended` (8.21+, via `ESLINT_USE_FLAT_CONFIG=true`) | ✅ `recommended-legacy` (default) |
+| ESLint | Flat config (`eslint.config.js`) |
+| :--- | :--- |
+| 10 | ✅ `recommended` |
+| 9 | ✅ `recommended` |
 
-Pick the config that matches the system you use — they are not interchangeable,
-because ESLint changed the shape of a config object between them:
-
-| Your config file | Config system | Use this config |
-| :--- | :--- | :--- |
-| `eslint.config.js` / `.mjs` / `.cjs` | flat | `recommended` (alias: `flat/recommended`) |
-| `.eslintrc`, `.eslintrc.js`, `.eslintrc.json`, `.eslintrc.yml` | eslintrc | `recommended-legacy` |
-
-Using the wrong one is not silent: passing the flat `recommended` config to an
-eslintrc `extends` fails with `Unexpected top-level property "name"`. If you see
-that, switch to `recommended-legacy`.
-
-### A note on ESLint 10
-
-ESLint 10 deleted the eslintrc config system, so `.eslintrc*` files are not read
-at all and `ESLINT_USE_FLAT_CONFIG=false` no longer does anything. This is an
-ESLint change, not a plugin limitation — if you are on ESLint 10 you must use
-flat config. `recommended-legacy` is still exported for anyone on ESLint 8 or 9.
-
-ESLint 10 also requires Node `^20.19.0 || ^22.13.0 || >=24`.
+ESLint 10 requires Node `^20.19.0 || ^22.13.0 || >=24`; ESLint 9 requires Node
+`^18.18.0 || ^20.9.0 || >=21.1.0`.
 
 ## Usage
 
@@ -102,51 +83,6 @@ module.exports = [
 ];
 ```
 
-### eslintrc config
-
-For `.eslintrc*` config files (deprecated by ESLint, but still supported here).
-
-#### Recommended
-
-Extend the `recommended-legacy` config. This is the only thing you need — it
-registers the plugin and turns both rules on:
-
-```json
-{
-    "extends": [
-        "plugin:prototype-pollution/recommended-legacy"
-    ]
-}
-```
-
-#### Custom configuration
-
-Add `prototype-pollution` to the plugins section. You can omit the
-`eslint-plugin-` prefix:
-
-```json
-{
-    "plugins": [
-        "prototype-pollution"
-    ]
-}
-```
-
-Then configure the rules you want under the rules section. Rule options are
-passed as an object:
-
-```json
-{
-    "rules": {
-        "prototype-pollution/no-bracket-notation-property-accessor": [
-            "error",
-            { "customMessage": "Please add an Object.hasOwn(obj, prop) check" }
-        ],
-        "prototype-pollution/no-unsafe-object-assign": "off"
-    }
-}
-```
-
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -159,13 +95,12 @@ All rules support a custom error message in the passed options.
 
 ⚠️ Configurations set to warn in.\
 ✅ Set in the `recommended` configuration.\
-🏛️ Set in the `recommended-legacy` configuration.\
 💡 Manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).
 
-| Name                                                                                         | Description                                               | ⚠️    | 💡 |
-| :------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :---- | :- |
-| [no-bracket-notation-property-accessor](docs/rules/no-bracket-notation-property-accessor.md) | Detect unsafe usage of bracket notation property accessor | ✅ 🏛️ |    |
-| [no-unsafe-object-assign](docs/rules/no-unsafe-object-assign.md)                             | Detect unsafe usage of Object.assign                      | ✅ 🏛️ | 💡 |
+| Name                                                                                         | Description                                               | ⚠️ | 💡 |
+| :------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :- | :- |
+| [no-bracket-notation-property-accessor](docs/rules/no-bracket-notation-property-accessor.md) | Detect unsafe usage of bracket notation property accessor | ✅  |    |
+| [no-unsafe-object-assign](docs/rules/no-unsafe-object-assign.md)                             | Detect unsafe usage of Object.assign                      | ✅  | 💡 |
 
 <!-- end auto-generated rules list -->
 

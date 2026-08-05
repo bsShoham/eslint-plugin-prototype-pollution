@@ -1,5 +1,5 @@
-// Self-contained on purpose: `Linter.Config` is a flat config in ESLint 9's own types but
-// an eslintrc config in `@types/eslint` for v8, so importing it would skew per consumer.
+// Self-contained: `eslint` is only a peer dependency, so these types must not
+// depend on its own types being resolvable in the consumer's project.
 
 declare namespace prototypePollution {
     type RuleSeverity = "off" | "warn" | "error" | 0 | 1 | 2;
@@ -35,11 +35,6 @@ declare namespace prototypePollution {
         readonly rules: RulesRecord;
     }
 
-    interface LegacyConfig {
-        readonly plugins: readonly string[];
-        readonly rules: RulesRecord;
-    }
-
     interface Plugin {
         readonly meta: {
             readonly name: string;
@@ -47,12 +42,7 @@ declare namespace prototypePollution {
         };
         readonly rules: Readonly<Record<RuleName, RuleModule>>;
         readonly configs: {
-            /** Flat config. */
             readonly recommended: FlatConfig;
-            /** Flat config, explicit alias of `recommended`. */
-            readonly "flat/recommended": FlatConfig;
-            /** eslintrc config. */
-            readonly "recommended-legacy": LegacyConfig;
         };
     }
 }
